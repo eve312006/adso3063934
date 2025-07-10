@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Memoria</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      background: linear-gradient(to right, #ffe0f0, #fce4ec);
+      font-family: 'Comic Sans MS', cursive;
+      margin: 0;
+      padding: 0;
+      color: #8e317a;
+    }
+
+    h1, h2, p {
+      text-align: center;
+    }
+
+    .game-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: #fff0f6;
+      border: 4px dashed #ff99cc;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px #ffb3d9;
+    }
+
+    .stat-box {
+      background: #ffe6f0;
+      border: 2px solid #ff99cc;
+      border-radius: 25px;
+      padding: 10px 20px;
+      color: #cc3366;
+      margin: 10px auto;
+      max-width: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 15px;
+      margin: 20px auto;
+      max-width: 480px;
+      justify-items: center;
+    }
+
+    .card {
+      width: 80px;
+      height: 80px;
+      perspective: 1000px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      border-radius: 15px;
+    }
+
+    .card.revealed .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 15px;
+      font-size: 2rem;
+    }
+
+    .card-front {
+      background: #ffb6d9;
+      border: 2px solid #ff80bf;
+    }
+
+    .card-back {
+      background: #fff0f6;
+      transform: rotateY(180deg);
+    }
+
+    .card.matched .card-inner {
+      box-shadow: 0 0 10px 2px #ff69b4;
+    }
+
+    #restart {
+      display: block;
+      margin: 20px auto;
+      background: linear-gradient(to right, #ff99cc, #ff66a3);
+      border: none;
+      padding: 10px 25px;
+      font-size: 1rem;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+    }
+
+    #restart:hover {
+      background: linear-gradient(to right, #f06292, #ec407a);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+    <h1>Juego de Memoria</h1>
+    <h2>¡Encuentra los pares !</h2>
+
+    <div class="stat-box">
+      <i class="fas fa-heart"></i><span id="moves">Movimientos: 0</span>
+    </div>
+    <div class="stat-box">
+      <i class="fas fa-clock"></i><span id="timer">Tiempo: 0:00</span>
+    </div>
+
+    <div class="grid"></div>
+    <button id="restart"><i class="fas fa-undo"></i> Reiniciar</button>
+  </div>
+
+  <script>
+    $(function () {
+      const emojis = ['🌸', '🎀', '🧁', '🐰', '🍭', '🦄', '💖'];
+      let cards = [...emojis, ...emojis];
+      let selected = [], matched = 0, moves = 0, seconds = 0, timer;
+
+      function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+      }
+
+      function startTimer() {
+        timer = setInterval(() => {
+          seconds++;
+          const mins = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          $('#timer').text(`Tiempo: ${mins}:${secs.toString().padStart(2, '0')}`);
+        }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timer);
+      }
+
+      function initGame() {
+        selected = [];
+        matched = 0;
+        moves = 0;
+        seconds = 0;
+        stopTimer();
+        $('#moves').text('Movimientos: 0');
+        $('#timer').text('Tiempo: 0:00');
+
+        $('.grid').empty();
+        cards = shuffle(cards);
+
+        cards.forEach(emoji => {
+          const card = $(`
+            <div class="card" data-emoji="${emoji}">
+              <div class="card-inner">
+                <div class="card-front">❓</div>
+                <div class="card-back">${emoji}</div>
+              </div>
+            </div>
+          `);
+          $('.grid').append(card);
+        });
+
+        $('.card').addClass('revealed');
+        setTimeout(() => {
+          $('.card').removeClass('revealed');
+          startTimer();
+        }, 2000);
+      }
+
+      function checkMatch() {
+        const [first, second] = selected;
+        if (first.data('emoji') === second.data('emoji')) {
+          first.addClass('matched');
+          second.addClass('matched');
+          matched++;
+        } else {
+          setTimeout(() => {
+            first.removeClass('revealed');
+            second.removeClass('revealed');
+          }, 800);
+        }
+        selected = [];
+        moves++;
+        $('#moves').text(`Movimientos: ${moves}`);
+
+        if (matched === emojis.length) {
+          stopTimer();
+          Swal.fire({
+            title: '¡Felicidades! 🎉',
+            html: `Completaste el juego en <b>${moves}</b> movimientos<br>Tiempo: <b>${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}</b>`,
+            icon: 'success',
+            confirmButtonText: 'Jugar de nuevo',
+            confirmButtonColor: '#ff99cc',
+            background: '#fff0f6',
+            color: '#cc3366'
+          }).then(result => {
+            if (result.isConfirmed) initGame();
+          });
+        }
+      }
+
+      $('.grid').on('click', '.card', function () {
+        const card = $(this);
+        if (card.hasClass('revealed') || card.hasClass('matched') || selected.length === 2) return;
+        card.addClass('revealed');
+        selected.push(card);
+        if (selected.length === 2) checkMatch();
+      });
+
+      $('#restart').click(() => initGame());
+
+      initGame();
+    });
+  </script>
+</body>
+
+</html>
