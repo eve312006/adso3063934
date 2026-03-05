@@ -1,0 +1,74 @@
+.data-fetching {
+  font-family: sans-serif;
+  padding: 1rem;
+}
+
+.data-fetching .error {
+  color: red;
+  font-weight: bold;
+}
+
+.dataList {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.dataItem {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  background: #fefefe;
+}
+
+.dataItem h4 {
+  margin: 0 0 0.25rem 0;
+}
+
+.dataItem p {
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* estilos específicos para pokémon */
+.pokeList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.pokeItem {
+  width: 100px;
+  text-align: center;
+}
+
+.pokeItem img {
+  width: 80px;
+  height: 80px;
+}
+
+/* interactividad */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  transform: scale(1.05);
+}
+
+.detailsView {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.detailsView img {
+  width: 120px;
+  height: 120px;
+}

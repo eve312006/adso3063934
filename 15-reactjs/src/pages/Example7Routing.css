@@ -1,0 +1,122 @@
+.example7 {
+  padding: 1rem;
+  font-family: sans-serif;
+  color: #333;
+}
+
+.example7 .header {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.5rem;
+}
+
+.example7 .muted {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.currentPath {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.25rem;
+}
+
+.internalNav {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.navBtn {
+  background: #007bff;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.navBtn:hover {
+  background: #0056b3;
+}
+
+.content {
+  min-height: 200px;
+}
+
+.info ul {
+  list-style: disc inside;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+  gap: 1rem;
+}
+
+.pokeCard {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.pokeCard img {
+  width: 100%;
+  height: auto;
+}
+
+.cardBody {
+  padding: 0.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBody h4 {
+  margin: 0;
+}
+
+.cardBody .type {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.cardBody .desc {
+  font-size: 0.8rem;
+  margin: 0.5rem 0;
+  flex: 1;
+}
+
+.cardBody .btn {
+  align-self: flex-start;
+  background: #28a745;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.cardBody .btn:hover {
+  background: #218838;
+}
+
+.detailsCard {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.detailsCard img {
+  width: 120px;
+  height: auto;
+}
+
+.details .meta {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
